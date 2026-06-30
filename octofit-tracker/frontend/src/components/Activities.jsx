@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 
 import { fetchCollection } from '../api'
 
-const endpointPath = '/api/activities/'
+const apiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+  : 'http://localhost:8000/api/activities/'
 
 function Activities() {
   const [activities, setActivities] = useState([])
@@ -11,7 +13,7 @@ function Activities() {
   useEffect(() => {
     let ignore = false
 
-    fetchCollection(endpointPath)
+    fetchCollection(apiEndpoint)
       .then((records) => {
         if (!ignore) {
           setActivities(records)

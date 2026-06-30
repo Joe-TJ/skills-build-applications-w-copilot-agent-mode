@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 
 import { fetchCollection } from '../api'
 
-const endpointPath = '/api/teams/'
+const apiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+  : 'http://localhost:8000/api/teams/'
 
 function Teams() {
   const [teams, setTeams] = useState([])
@@ -11,7 +13,7 @@ function Teams() {
   useEffect(() => {
     let ignore = false
 
-    fetchCollection(endpointPath)
+    fetchCollection(apiEndpoint)
       .then((records) => {
         if (!ignore) {
           setTeams(records)

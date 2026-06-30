@@ -22,10 +22,12 @@ export const normalizeCollection = (payload) => {
 }
 
 export const fetchCollection = async (resource) => {
-  const endpoint = resource.startsWith('/api/')
-    ? resource.replace(/^\/api\//, '').replace(/\/$/, '')
-    : resource
-  const response = await fetch(`${apiBaseUrl}/${endpoint}/`)
+  const endpointUrl = resource.startsWith('http')
+    ? resource
+    : `${apiBaseUrl}/${resource.startsWith('/api/')
+      ? resource.replace(/^\/api\//, '').replace(/\/$/, '')
+      : resource}/`
+  const response = await fetch(endpointUrl)
 
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`)
