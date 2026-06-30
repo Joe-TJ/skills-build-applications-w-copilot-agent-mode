@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 
+import { connectDatabase, disconnectDatabase, MONGODB_URI } from '../config/database';
 import { Activity, LeaderboardEntry, Team, User, Workout } from '../models';
 
+// Seed command: npm run seed --prefix octofit-tracker/backend
+// Seed the octofit_db database with test data.
 dotenv.config();
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/octofit_db';
 
 const users = [
   {
@@ -118,7 +118,7 @@ const seed = async (): Promise<void> => {
   console.log('Seed the octofit_db database with test data');
   console.log(`Connecting to ${MONGODB_URI}`);
 
-  await mongoose.connect(MONGODB_URI);
+  await connectDatabase();
 
   await Promise.all([
     User.deleteMany({}),
@@ -147,5 +147,5 @@ seed()
     process.exitCode = 1;
   })
   .finally(async () => {
-    await mongoose.disconnect();
+    await disconnectDatabase();
   });
